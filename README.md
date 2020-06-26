@@ -1,7 +1,7 @@
 # Desafio Técnico - Frontend Cirrus
 
 ## Ferramentas
-* Recomendável utilizar ReactJS ou Angular para desenvolver a interface.
+* Recomendável utilizar React ou Angular para desenvolver a interface.
 * Recomendável uso do Typescript (ES6 ou superior).
 * Componentes e Design de terceiros podem ser usados, entretanto, todos devem ser documentados no README e descritos porque foram escolhidos.
 * Não esqueça de documentar.
