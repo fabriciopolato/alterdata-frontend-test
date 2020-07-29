@@ -1,24 +1,22 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import { Container, Content } from './styles';
-import { Link } from 'react-router-dom';
-import { ITicket } from '../../services/api';
+import { ITicket } from '../../interfaces/interfaces';
 
-interface PropsTickets {
+interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
   ticket: ITicket;
 }
 
-const Ticket: React.FC<PropsTickets> = ({ ticket }) => {
-  const { id, subject, message, created_at, author } = ticket;
+const Ticket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
+  const { subject, message, created_at, author, deleted_at } = ticket;
   return (
-    <Container>
+    <Container {...rest}>
       <Content>
         <h1>{subject}</h1>
-        <Link to="/ticket/1">
-          <p>{message}</p>
-        </Link>
+        <p>{message}</p>
         <span>{created_at}</span>
       </Content>
       <span>{author}</span>
+      <span>{deleted_at}</span>
     </Container>
   );
 };
