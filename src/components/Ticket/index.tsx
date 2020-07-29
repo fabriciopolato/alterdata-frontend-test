@@ -3,6 +3,7 @@ import { Container, Content } from './styles';
 import { Link } from 'react-router-dom';
 
 interface ITicket {
+  id: number;
   message: string;
   subject: string;
   author: string;
@@ -14,13 +15,12 @@ interface PropsTickets {
 }
 
 const Ticket: React.FC<PropsTickets> = ({ ticket }) => {
-  const { subject, message, created_at, author } = ticket;
-
+  const { id, subject, message, created_at, author } = ticket;
   return (
     <Container>
       <Content>
         <h1>{subject}</h1>
-        <Link to="/">
+        <Link to="/ticket/1">
           <p>{message}</p>
         </Link>
         <span>{created_at}</span>
