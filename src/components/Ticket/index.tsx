@@ -1,14 +1,7 @@
 import React from 'react';
 import { Container, Content } from './styles';
 import { Link } from 'react-router-dom';
-
-interface ITicket {
-  id: number;
-  message: string;
-  subject: string;
-  author: string;
-  created_at: string;
-}
+import { ITicket } from '../../services/api';
 
 interface PropsTickets {
   ticket: ITicket;
