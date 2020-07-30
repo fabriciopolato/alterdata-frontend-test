@@ -2,7 +2,6 @@ import React, { createContext, useState, Dispatch, useEffect, SetStateAction } f
 import { getTokenFromLocalStorage } from '../services/localStorage';
 import { api, closeTicket, reopenTicket } from '../services/api';
 import { ITicket } from '../interfaces/interfaces';
-import { OpenTickets } from '../pages/Home/styles';
 
 export interface IContext {
   clickedTicket: ITicket;
@@ -17,6 +16,8 @@ export interface IContext {
   setAllClosedTickets: Dispatch<SetStateAction<ITicket[]>>;
   handleCloseTicket(id: string): void;
   handleReopenTicket(id: string): void;
+  refreshApi: boolean;
+  setRefreshApi: Dispatch<SetStateAction<boolean>>;
 }
 
 const Context = createContext<IContext>({} as IContext);
@@ -26,6 +27,7 @@ const ContextProvider: React.FC = ({ children }) => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [allOpenTickets, setAllOpenTickets] = useState<ITicket[]>([]);
   const [allClosedTickets, setAllClosedTickets] = useState<ITicket[]>([]);
+  const [refreshApi, setRefreshApi] = useState<boolean>(false);
 
   useEffect(() => {
     const token = getTokenFromLocalStorage();
@@ -44,12 +46,14 @@ const ContextProvider: React.FC = ({ children }) => {
     setToggleModal(!toggleModal);
   };
 
-  const handleCloseTicket = (id: string) => {
-    closeTicket(id);
+  const handleCloseTicket = async (id: string) => {
+    await closeTicket(id);
+    setRefreshApi(!refreshApi);
   };
 
-  const handleReopenTicket = (id: string) => {
-    reopenTicket(id);
+  const handleReopenTicket = async (id: string) => {
+    await reopenTicket(id);
+    setRefreshApi(!refreshApi);
   };
 
   return (
@@ -67,6 +71,8 @@ const ContextProvider: React.FC = ({ children }) => {
         setAllClosedTickets,
         handleCloseTicket,
         handleReopenTicket,
+        refreshApi,
+        setRefreshApi,
       }}
     >
       {children}
