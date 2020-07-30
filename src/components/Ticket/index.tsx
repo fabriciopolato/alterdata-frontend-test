@@ -11,8 +11,12 @@ interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
 
 const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest }) => {
   const { subject, message, created_at, username, deleted_at } = ticket;
-  const context = useContext(Context);
-  const { handleClickTicket, handleToggleModal, handleCloseTicket, handleReopenTicket } = context;
+  const {
+    handleClickTicket,
+    handleToggleModal,
+    handleCloseTicket,
+    handleReopenTicket,
+  } = useContext(Context);
 
   return (
     <Container {...rest}>

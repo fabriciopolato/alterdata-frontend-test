@@ -13,6 +13,7 @@ const Home: React.FC = () => {
     setAllOpenTickets,
     allClosedTickets,
     setAllClosedTickets,
+    refreshApi,
   } = useContext(Context);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
       setAllOpenTickets(openTickets.data);
       setAllClosedTickets(closedTickets.data);
     })();
-  }, [setAllClosedTickets, setAllOpenTickets]);
+  }, [setAllClosedTickets, setAllOpenTickets, refreshApi]);
 
   return (
     <>
