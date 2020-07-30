@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { Ticket, Modal, ClickedTicket, Button } from '../../components';
 import { Container, OpenTickets, ClosedTickets, CommentSection, ButtonsSection } from './styles';
-import { getAllTickets, getAllClosedTickets } from '../../services/api';
+import { getAllOpenTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
 
 const Home: React.FC = () => {
@@ -14,27 +14,44 @@ const Home: React.FC = () => {
     allClosedTickets,
     setAllClosedTickets,
     refreshApi,
+    comment,
+    setComment,
+    handleSubmit,
   } = useContext(Context);
 
   useEffect(() => {
     (async () => {
-      const openTickets = await getAllTickets();
+      const openTickets = await getAllOpenTickets();
       const closedTickets = await getAllClosedTickets();
       setAllOpenTickets(openTickets.data);
       setAllClosedTickets(closedTickets.data);
+      setComment('');
     })();
-  }, [setAllClosedTickets, setAllOpenTickets, refreshApi]);
+  }, [setAllClosedTickets, setAllOpenTickets, refreshApi, setComment]);
 
   return (
     <>
       <Modal toggle={toggleModal} handleToggle={handleToggleModal} id={clickedTicket?.id}>
         <ClickedTicket ticket={clickedTicket} />
         <CommentSection>
-          <label htmlFor="comment">Comentário:</label>
-          <textarea name="comment" id="comment" cols={30} rows={10}></textarea>
+          {!clickedTicket.deleted_at ? (
+            <>
+              <label htmlFor="comment">Comentário:</label>
+              <textarea
+                onChange={e => {
+                  setComment(e.target.value);
+                }}
+                value={comment}
+                name="comment"
+                id="comment"
+                cols={30}
+                rows={10}
+              ></textarea>
+            </>
+          ) : null}
         </CommentSection>
         <ButtonsSection>
-          <Button>Responder</Button>
+          <Button onClick={() => handleSubmit(clickedTicket.id, comment)}>Responder</Button>
           <Button>Cancelar</Button>
         </ButtonsSection>
       </Modal>
