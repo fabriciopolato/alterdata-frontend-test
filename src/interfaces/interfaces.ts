@@ -2,7 +2,7 @@ export interface ITicket {
   id: string;
   message: string;
   subject: string;
-  author: string;
+  user_id: number;
   created_at: string;
   deleted_at: string;
 }
