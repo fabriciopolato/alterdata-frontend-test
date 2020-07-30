@@ -5,7 +5,6 @@ import { getAllTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
 
 const Home: React.FC = () => {
-  const context = useContext(Context);
   const {
     clickedTicket,
     toggleModal,
@@ -14,7 +13,7 @@ const Home: React.FC = () => {
     setAllOpenTickets,
     allClosedTickets,
     setAllClosedTickets,
-  } = context;
+  } = useContext(Context);
 
   useEffect(() => {
     (async () => {
@@ -32,14 +31,18 @@ const Home: React.FC = () => {
       </Modal>
       <Container>
         <OpenTickets>
-          {allOpenTickets.map(ticket => {
-            return <Ticket key={ticket.id} ticket={ticket} />;
-          })}
+          {allOpenTickets.length
+            ? allOpenTickets.map(ticket => {
+                return <Ticket key={ticket.id} ticket={ticket} />;
+              })
+            : null}
         </OpenTickets>
         <ClosedTickets>
-          {allClosedTickets.map(ticket => {
-            return <Ticket key={ticket.id} ticket={ticket} />;
-          })}
+          {allClosedTickets.length
+            ? allClosedTickets.map(ticket => {
+                return <Ticket closedTicket key={ticket.id} ticket={ticket} />;
+              })
+            : null}
         </ClosedTickets>
       </Container>
     </>
