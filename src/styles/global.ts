@@ -17,6 +17,7 @@ export default createGlobalStyle`
     width: 100vw;
     max-width: 100%;
     min-height: 100vh;
+    background-color: #ccc;
   }
 
   html {
@@ -32,18 +33,17 @@ export default createGlobalStyle`
   }
 
   body::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
   }
 
   body::-webkit-scrollbar-track {
-    background: #CFD8DC
+    background: rgb(207,216,220,0.5)
   }
 
   body::-webkit-scrollbar-thumb {
-    background-color: #90A4AE  ;
+    background-color: rgb(100,100,100, 0.4);
     border-radius: 12px;
-    border: 4px solid #CFD8DC
   }
 
   body, input, button {

@@ -1,8 +1,17 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background-color: #ccc;
-  height: 100vh;
+  margin: 20px 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-evenly;
 `;
-export const OpenTickets = styled.div``;
-export const ClosedTickets = styled.div``;
+
+export const OpenTickets = styled.div`
+  display: flex;
+  width: 1040px;
+  flex-wrap: wrap;
+`;
+export const ClosedTickets = styled.div`
+  align-self: center;
+`;
