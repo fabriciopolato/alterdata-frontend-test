@@ -1,6 +1,6 @@
 import React, { createContext, useState, Dispatch, useEffect, SetStateAction } from 'react';
 import { getTokenFromLocalStorage } from '../services/localStorage';
-import { api, closeTicket, reopenTicket } from '../services/api';
+import { api, closeTicket, reopenTicket, createCommentInClickedTicket } from '../services/api';
 import { ITicket } from '../interfaces/interfaces';
 
 export interface IContext {
@@ -18,16 +18,20 @@ export interface IContext {
   handleReopenTicket(id: string): void;
   refreshApi: boolean;
   setRefreshApi: Dispatch<SetStateAction<boolean>>;
+  comment: string;
+  setComment: Dispatch<SetStateAction<string>>;
+  handleSubmit(ticket_id: string, comment: string): void;
 }
 
 const Context = createContext<IContext>({} as IContext);
 
 const ContextProvider: React.FC = ({ children }) => {
   const [clickedTicket, setClickedTicket] = useState<ITicket>({} as ITicket);
-  const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [toggleModal, setToggleModal] = useState(false);
   const [allOpenTickets, setAllOpenTickets] = useState<ITicket[]>([]);
   const [allClosedTickets, setAllClosedTickets] = useState<ITicket[]>([]);
-  const [refreshApi, setRefreshApi] = useState<boolean>(false);
+  const [refreshApi, setRefreshApi] = useState(false);
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     const token = getTokenFromLocalStorage();
@@ -56,6 +60,10 @@ const ContextProvider: React.FC = ({ children }) => {
     setRefreshApi(!refreshApi);
   };
 
+  const handleSubmit = (ticket_id: string, comment: string) => {
+    createCommentInClickedTicket(ticket_id, comment);
+  };
+
   return (
     <Context.Provider
       value={{
@@ -73,6 +81,9 @@ const ContextProvider: React.FC = ({ children }) => {
         handleReopenTicket,
         refreshApi,
         setRefreshApi,
+        comment,
+        setComment,
+        handleSubmit,
       }}
     >
       {children}
