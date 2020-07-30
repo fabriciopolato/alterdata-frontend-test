@@ -3,6 +3,7 @@ import { Container, Content, ButtonsSection } from './styles';
 import { ITicket } from '../../interfaces/interfaces';
 import { Button } from '../';
 import { Context } from '../../context/context';
+import Moment from 'react-moment';
 
 interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
   ticket: ITicket;
@@ -23,19 +24,35 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
       <Content>
         <h1>{subject}</h1>
         <p>{message}</p>
-        <span>{created_at}</span>
-        <span>{deleted_at}</span>
+        <span>Criado em:</span>
+        <Moment format="DD/MM/YYYY">{created_at}</Moment>
+        {closedTicket ? (
+          <>
+            <span>Encerrado em:</span>
+            <Moment format="DD/MM/YYYY">{deleted_at}</Moment>
+          </>
+        ) : null}
       </Content>
       <span>{username}</span>
       <ButtonsSection>
         {closedTicket ? (
-          <Button
-            onClick={() => {
-              handleReopenTicket(ticket.id);
-            }}
-          >
-            Desarquivar
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                handleClickTicket(ticket);
+                handleToggleModal();
+              }}
+            >
+              Visualizar
+            </Button>
+            <Button
+              onClick={() => {
+                handleReopenTicket(ticket.id);
+              }}
+            >
+              Desarquivar
+            </Button>
+          </>
         ) : (
           <>
             <Button
