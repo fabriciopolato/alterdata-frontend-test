@@ -6,12 +6,13 @@ import { Context } from '../../context/context';
 
 interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
   ticket: ITicket;
+  closedTicket?: boolean;
 }
 
-const Ticket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
-  const { subject, message, created_at, user_id, deleted_at } = ticket;
+const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest }) => {
+  const { subject, message, created_at, username, deleted_at } = ticket;
   const context = useContext(Context);
-  const { handleClickTicket, handleToggleModal } = context;
+  const { handleClickTicket, handleToggleModal, handleCloseTicket, handleReopenTicket } = context;
 
   return (
     <Container {...rest}>
@@ -21,17 +22,36 @@ const Ticket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
         <span>{created_at}</span>
         <span>{deleted_at}</span>
       </Content>
-      <span>{user_id}</span>
+      <span>{username}</span>
       <ButtonsSection>
-        <Button
-          onClick={() => {
-            handleToggleModal();
-            handleClickTicket(ticket);
-          }}
-        >
-          Responder
-        </Button>
-        <Button>Arquivar</Button>
+        {closedTicket ? (
+          <Button
+            onClick={() => {
+              handleReopenTicket(ticket.id);
+            }}
+          >
+            Desarquivar
+          </Button>
+        ) : (
+          <>
+            <Button
+              onClick={() => {
+                handleClickTicket(ticket);
+                handleToggleModal();
+              }}
+            >
+              Responder
+            </Button>
+
+            <Button
+              onClick={() => {
+                handleCloseTicket(ticket.id);
+              }}
+            >
+              Arquivar
+            </Button>
+          </>
+        )}
       </ButtonsSection>
     </Container>
   );

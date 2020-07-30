@@ -5,4 +5,5 @@ export interface ITicket {
   user_id: number;
   created_at: string;
   deleted_at: string;
+  username: string;
 }

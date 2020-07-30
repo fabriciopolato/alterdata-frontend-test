@@ -16,7 +16,7 @@ export interface IContext {
   allClosedTickets: ITicket[];
   setAllClosedTickets: Dispatch<SetStateAction<ITicket[]>>;
   handleCloseTicket(id: string): void;
-  handleOpenTicket(id: string): void;
+  handleReopenTicket(id: string): void;
 }
 
 const Context = createContext<IContext>({} as IContext);
@@ -48,7 +48,7 @@ const ContextProvider: React.FC = ({ children }) => {
     closeTicket(id);
   };
 
-  const handleOpenTicket = (id: string) => {
+  const handleReopenTicket = (id: string) => {
     reopenTicket(id);
   };
 
@@ -66,7 +66,7 @@ const ContextProvider: React.FC = ({ children }) => {
         allClosedTickets,
         setAllClosedTickets,
         handleCloseTicket,
-        handleOpenTicket,
+        handleReopenTicket,
       }}
     >
       {children}
