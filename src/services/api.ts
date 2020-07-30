@@ -5,11 +5,15 @@ export const api = axios.create({
   baseURL: 'http://localhost:3333',
   headers: {
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJjYXJsb3NAZW1haWwuY29tIiwiaWF0IjoxNTk2MTE2MTE4fQ.2WuKZsSX_nLuC0qRIy6Ix4WZR_jSoBhUE1skhHbwToA',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJjYXJsb3NAZW1haWwuY29tIiwiaWF0IjoxNTk2MTQ4Nzg1fQ.NEnTAaNnS38Zf9ob3_uAJ3w7YSYfg9_BM_V7ORqS1r0',
   },
 });
 
-export const getAllTickets = async (): Promise<AxiosResponse<ITicket[]>> => {
+export const login = async (): Promise<AxiosResponse<any>> => {
+  return await api.post('/login');
+};
+
+export const getAllOpenTickets = async (): Promise<AxiosResponse<ITicket[]>> => {
   return await api.get('/tickets');
 };
 
@@ -30,9 +34,25 @@ export const closeTicket = async (id: string): Promise<AxiosResponse<ITicket>> =
 };
 
 export const reopenTicket = async (id: string): Promise<AxiosResponse<ITicket>> => {
-  return await api.put(`/tickets/reopen/${id}`);
+  return await api.put(`/tickets/${id}/reopen`);
 };
 
-export const login = async (): Promise<AxiosResponse<any>> => {
-  return await api.post('/login');
+export const createCommentInClickedTicket = async (
+  ticket_id: string,
+  comment: string
+): Promise<AxiosResponse<ITicket>> => {
+  return await api.post(`/tickets/${ticket_id}/comments`, { comment });
+};
+
+export const getCommentsFromClickedTicket = async (
+  ticket_id: string
+): Promise<AxiosResponse<ITicket>> => {
+  return await api.get(`/tickets/${ticket_id}/comments`);
+};
+
+export const deleteCommentFromClickedTicket = async (
+  ticket_id: string,
+  comment_id: string
+): Promise<AxiosResponse<ITicket>> => {
+  return await api.delete(`/tickets/${ticket_id}/comments/${comment_id}`);
 };
