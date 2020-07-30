@@ -42,7 +42,7 @@ export const Content = styled.div`
   width: 100%;
   max-width: 480px;
   padding: 12px;
-  background: linear-gradient(180deg, #e8798d 9.38%, #d94a64 89.06%);
+  background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 22px;
   z-index: 20;

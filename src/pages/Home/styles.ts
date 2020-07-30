@@ -12,6 +12,16 @@ export const OpenTickets = styled.div`
   width: 1040px;
   flex-wrap: wrap;
 `;
-export const ClosedTickets = styled.div`
-  align-self: center;
+export const ClosedTickets = styled.div``;
+
+export const CommentSection = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ButtonsSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+  border: 1px solid #666666;
 `;

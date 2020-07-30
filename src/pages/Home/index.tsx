@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
-import { Ticket, Modal, ClickedTicket } from '../../components';
-import { Container, OpenTickets, ClosedTickets } from './styles';
+import { Ticket, Modal, ClickedTicket, Button } from '../../components';
+import { Container, OpenTickets, ClosedTickets, CommentSection, ButtonsSection } from './styles';
 import { getAllTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
 
@@ -29,6 +29,14 @@ const Home: React.FC = () => {
     <>
       <Modal toggle={toggleModal} handleToggle={handleToggleModal} id={clickedTicket?.id}>
         <ClickedTicket ticket={clickedTicket} />
+        <CommentSection>
+          <label htmlFor="comment">Comentário:</label>
+          <textarea name="comment" id="comment" cols={30} rows={10}></textarea>
+        </CommentSection>
+        <ButtonsSection>
+          <Button>Responder</Button>
+          <Button>Cancelar</Button>
+        </ButtonsSection>
       </Modal>
       <Container>
         <OpenTickets>
