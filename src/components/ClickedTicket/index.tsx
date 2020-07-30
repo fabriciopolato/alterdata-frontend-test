@@ -7,7 +7,7 @@ interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ClickedTicket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
-  const { subject, message, created_at, author, deleted_at } = ticket;
+  const { subject, message, created_at, user_id, deleted_at } = ticket;
   return (
     <Container {...rest}>
       <Content>
@@ -15,7 +15,7 @@ const ClickedTicket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
         <p>{message}</p>
         <span>{created_at}</span>
       </Content>
-      <span>{author}</span>
+      <span>{user_id}</span>
       <span>{deleted_at}</span>
     </Container>
   );

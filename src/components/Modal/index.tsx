@@ -1,6 +1,5 @@
 import React from 'react';
 import close from '../../assets/close.svg';
-
 import { Container, Content, CloseIcon } from './styles';
 
 interface IProps {
