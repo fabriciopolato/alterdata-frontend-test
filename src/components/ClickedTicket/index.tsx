@@ -8,6 +8,7 @@ interface PropsTickets extends HTMLAttributes<HTMLDivElement> {
 
 const ClickedTicket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
   const { subject, message, created_at, user_id, deleted_at } = ticket;
+
   return (
     <Container {...rest}>
       <Content>
