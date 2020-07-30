@@ -1,7 +1,8 @@
 import React, { createContext, useState, Dispatch, useEffect, SetStateAction } from 'react';
 import { getTokenFromLocalStorage } from '../services/localStorage';
-import { api } from '../services/api';
+import { api, closeTicket, reopenTicket } from '../services/api';
 import { ITicket } from '../interfaces/interfaces';
+import { OpenTickets } from '../pages/Home/styles';
 
 export interface IContext {
   clickedTicket: ITicket;
@@ -14,7 +15,10 @@ export interface IContext {
   setAllOpenTickets: Dispatch<SetStateAction<ITicket[]>>;
   allClosedTickets: ITicket[];
   setAllClosedTickets: Dispatch<SetStateAction<ITicket[]>>;
+  handleCloseTicket(id: string): void;
+  handleOpenTicket(id: string): void;
 }
+
 const Context = createContext<IContext>({} as IContext);
 
 const ContextProvider: React.FC = ({ children }) => {
@@ -25,7 +29,7 @@ const ContextProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const token = getTokenFromLocalStorage();
-    if (!token) {
+    if (token) {
       api.defaults.headers.Authorization = `Bearer ${token}`;
     }
     // else {
@@ -38,6 +42,14 @@ const ContextProvider: React.FC = ({ children }) => {
 
   const handleToggleModal = () => {
     setToggleModal(!toggleModal);
+  };
+
+  const handleCloseTicket = (id: string) => {
+    closeTicket(id);
+  };
+
+  const handleOpenTicket = (id: string) => {
+    reopenTicket(id);
   };
 
   return (
@@ -53,6 +65,8 @@ const ContextProvider: React.FC = ({ children }) => {
         setAllOpenTickets,
         allClosedTickets,
         setAllClosedTickets,
+        handleCloseTicket,
+        handleOpenTicket,
       }}
     >
       {children}
