@@ -5,7 +5,7 @@ export const api = axios.create({
   baseURL: 'http://localhost:3333',
   headers: {
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2FvQGVtYWlsLmNvbSIsImlhdCI6MTU5NjAyOTc2M30.I4d3YDC1Ba2NJbi868oR4eySf2nXCVaDomq12bkaYNc',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJjYXJsb3NAZW1haWwuY29tIiwiaWF0IjoxNTk2MTE2MTE4fQ.2WuKZsSX_nLuC0qRIy6Ix4WZR_jSoBhUE1skhHbwToA',
   },
 });
 
@@ -27,6 +27,10 @@ export const answerTicket = async (id: string): Promise<AxiosResponse<ITicket>> 
 
 export const closeTicket = async (id: string): Promise<AxiosResponse<ITicket>> => {
   return await api.delete(`/tickets/${id}`);
+};
+
+export const reopenTicket = async (id: string): Promise<AxiosResponse<ITicket>> => {
+  return await api.put(`/tickets/reopen/${id}`);
 };
 
 export const login = async (): Promise<AxiosResponse<any>> => {
