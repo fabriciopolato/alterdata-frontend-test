@@ -17,6 +17,8 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
     handleToggleModal,
     handleCloseTicket,
     handleReopenTicket,
+    handleCommentsTicket,
+    setComment,
   } = useContext(Context);
 
   return (
@@ -40,6 +42,8 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
             <Button
               onClick={() => {
                 handleClickTicket(ticket);
+                handleCommentsTicket(ticket.id);
+                setComment('');
                 handleToggleModal();
               }}
             >
@@ -58,6 +62,8 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
             <Button
               onClick={() => {
                 handleClickTicket(ticket);
+                handleCommentsTicket(ticket.id);
+                setComment('');
                 handleToggleModal();
               }}
             >
