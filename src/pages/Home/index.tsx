@@ -26,7 +26,7 @@ const Home: React.FC = () => {
     refreshApi,
     comment,
     setComment,
-    handleSubmit,
+    handleCreateComment,
     setCommentsFromClickedTicket,
     commentsFromClickedTicket,
     handleCommentsTicket,
@@ -98,7 +98,7 @@ const Home: React.FC = () => {
           <Button
             onClick={async () => {
               if (comment) {
-                handleSubmit(clickedTicket.id);
+                handleCreateComment(clickedTicket.id);
               }
               handleCommentsTicket(clickedTicket.id);
             }}

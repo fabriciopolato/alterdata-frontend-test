@@ -38,7 +38,7 @@ export interface IContext {
   setRefreshApi: Dispatch<SetStateAction<boolean>>;
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
-  handleSubmit(ticket_id: string): void;
+  handleCreateComment(ticket_id: string): void;
   commentsFromClickedTicket: IComment[];
   setCommentsFromClickedTicket: Dispatch<SetStateAction<IComment[]>>;
   handleCommentsTicket(ticket_id: string): void;
@@ -98,8 +98,17 @@ const ContextProvider: React.FC = ({ children }) => {
     setRefreshApi(!refreshApi);
   };
 
-  const handleSubmit = (ticket_id: string) => {
+  const handleCreateComment = async (ticket_id: string) => {
     createCommentInClickedTicket(ticket_id, comment);
+
+    try {
+      const createdComment = await createCommentInClickedTicket(ticket_id, comment);
+      setCommentsFromClickedTicket(prevState => [...prevState, createdComment.data]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setComment('');
   };
 
   const handleCommentsTicket = async (ticket_id: string) => {
@@ -145,7 +154,7 @@ const ContextProvider: React.FC = ({ children }) => {
         setRefreshApi,
         comment,
         setComment,
-        handleSubmit,
+        handleCreateComment,
         commentsFromClickedTicket,
         setCommentsFromClickedTicket,
         handleCommentsTicket,
