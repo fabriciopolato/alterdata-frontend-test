@@ -15,5 +15,4 @@ export interface IComment {
   user_id: number;
   ticket_id: number;
   created_at: string;
-  updated_at: string;
 }

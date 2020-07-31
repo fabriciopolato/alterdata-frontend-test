@@ -1,4 +1,11 @@
-import React, { createContext, useState, Dispatch, useEffect, SetStateAction } from 'react';
+import React, {
+  createContext,
+  useState,
+  Dispatch,
+  useEffect,
+  SetStateAction,
+  FormEvent,
+} from 'react';
 import { getTokenFromLocalStorage } from '../services/localStorage';
 import {
   api,
@@ -7,6 +14,7 @@ import {
   createCommentInClickedTicket,
   getCommentsFromClickedTicket,
   deleteCommentFromClickedTicket,
+  createTicket,
 } from '../services/api';
 import { ITicket, IComment } from '../interfaces/interfaces';
 
@@ -14,9 +22,12 @@ export interface IContext {
   clickedTicket: ITicket;
   setClickedTicket: Dispatch<SetStateAction<ITicket>>;
   handleClickTicket(clickedTicket: ITicket): void;
-  toggleModal: boolean;
-  setToggleModal: Dispatch<SetStateAction<boolean>>;
-  handleToggleModal(): void;
+  toggleModalTicket: boolean;
+  setToggleModalTicket: Dispatch<SetStateAction<boolean>>;
+  handleToggleModalTicket(): void;
+  toggleModalNewTicket: boolean;
+  setToggleModalNewTicket: Dispatch<SetStateAction<boolean>>;
+  handleToggleModalNewTicket(): void;
   allOpenTickets: ITicket[];
   setAllOpenTickets: Dispatch<SetStateAction<ITicket[]>>;
   allClosedTickets: ITicket[];
@@ -27,23 +38,31 @@ export interface IContext {
   setRefreshApi: Dispatch<SetStateAction<boolean>>;
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
-  handleSubmit(ticket_id: string, comment: string): void;
+  handleSubmit(ticket_id: string): void;
   commentsFromClickedTicket: IComment[];
   setCommentsFromClickedTicket: Dispatch<SetStateAction<IComment[]>>;
   handleCommentsTicket(ticket_id: string): void;
   handleDeleteComment(ticket_id: string, comment_id: string): void;
+  subject: string;
+  setSubject: Dispatch<SetStateAction<string>>;
+  message: string;
+  setMessage: Dispatch<SetStateAction<string>>;
+  handleCreateTicket(e: FormEvent): void;
 }
 
 const Context = createContext<IContext>({} as IContext);
 
 const ContextProvider: React.FC = ({ children }) => {
   const [clickedTicket, setClickedTicket] = useState<ITicket>({} as ITicket);
-  const [toggleModal, setToggleModal] = useState(false);
+  const [toggleModalTicket, setToggleModalTicket] = useState(false);
+  const [toggleModalNewTicket, setToggleModalNewTicket] = useState(false);
   const [allOpenTickets, setAllOpenTickets] = useState<ITicket[]>([]);
   const [allClosedTickets, setAllClosedTickets] = useState<ITicket[]>([]);
   const [refreshApi, setRefreshApi] = useState(false);
   const [comment, setComment] = useState('');
   const [commentsFromClickedTicket, setCommentsFromClickedTicket] = useState<IComment[]>([]);
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const token = getTokenFromLocalStorage();
@@ -58,8 +77,15 @@ const ContextProvider: React.FC = ({ children }) => {
     setClickedTicket(clickedTicket);
   };
 
-  const handleToggleModal = () => {
-    setToggleModal(!toggleModal);
+  const handleToggleModalTicket = () => {
+    setToggleModalTicket(!toggleModalTicket);
+    setComment('');
+  };
+
+  const handleToggleModalNewTicket = () => {
+    setToggleModalNewTicket(!toggleModalNewTicket);
+    setMessage('');
+    setSubject('');
   };
 
   const handleCloseTicket = async (id: string) => {
@@ -72,7 +98,7 @@ const ContextProvider: React.FC = ({ children }) => {
     setRefreshApi(!refreshApi);
   };
 
-  const handleSubmit = (ticket_id: string, comment: string) => {
+  const handleSubmit = (ticket_id: string) => {
     createCommentInClickedTicket(ticket_id, comment);
   };
 
@@ -82,7 +108,22 @@ const ContextProvider: React.FC = ({ children }) => {
   };
 
   const handleDeleteComment = async (ticket_id: string, comment_id: string) => {
-    await deleteCommentFromClickedTicket(ticket_id, comment_id);
+    try {
+      await deleteCommentFromClickedTicket(ticket_id, comment_id);
+      const updatedComments = commentsFromClickedTicket.filter(
+        comment => comment.id !== comment_id
+      );
+      setCommentsFromClickedTicket(updatedComments);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreateTicket = async (e: FormEvent) => {
+    e.preventDefault();
+    await createTicket(subject, message);
+    setRefreshApi(!refreshApi);
+    setToggleModalNewTicket(!toggleModalNewTicket);
   };
 
   return (
@@ -91,9 +132,9 @@ const ContextProvider: React.FC = ({ children }) => {
         clickedTicket,
         setClickedTicket,
         handleClickTicket,
-        toggleModal,
-        setToggleModal,
-        handleToggleModal,
+        toggleModalTicket,
+        setToggleModalTicket,
+        handleToggleModalTicket,
         allOpenTickets,
         setAllOpenTickets,
         allClosedTickets,
@@ -109,6 +150,14 @@ const ContextProvider: React.FC = ({ children }) => {
         setCommentsFromClickedTicket,
         handleCommentsTicket,
         handleDeleteComment,
+        toggleModalNewTicket,
+        setToggleModalNewTicket,
+        handleToggleModalNewTicket,
+        subject,
+        setSubject,
+        message,
+        setMessage,
+        handleCreateTicket,
       }}
     >
       {children}
