@@ -25,3 +25,13 @@ export const ButtonsSection = styled.div`
   align-self: flex-end;
   border: 1px solid #666666;
 `;
+
+export const Form = styled.form`
+  > label {
+    display: block;
+  }
+
+  > input {
+    margin: 10px;
+  }
+`;

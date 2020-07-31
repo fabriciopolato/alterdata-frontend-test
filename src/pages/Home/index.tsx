@@ -1,14 +1,24 @@
 import React, { useEffect, useContext } from 'react';
 import { Ticket, Modal, ClickedTicket, Button } from '../../components';
-import { Container, OpenTickets, ClosedTickets, CommentSection, ButtonsSection } from './styles';
+import {
+  Container,
+  OpenTickets,
+  ClosedTickets,
+  CommentSection,
+  ButtonsSection,
+  Form,
+} from './styles';
 import { getAllOpenTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
+import Moment from 'react-moment';
 
 const Home: React.FC = () => {
   const {
     clickedTicket,
-    toggleModal,
-    handleToggleModal,
+    toggleModalTicket,
+    handleToggleModalTicket,
+    toggleModalNewTicket,
+    handleToggleModalNewTicket,
     allOpenTickets,
     setAllOpenTickets,
     allClosedTickets,
@@ -21,6 +31,11 @@ const Home: React.FC = () => {
     commentsFromClickedTicket,
     handleCommentsTicket,
     handleDeleteComment,
+    setMessage,
+    message,
+    setSubject,
+    subject,
+    handleCreateTicket,
   } = useContext(Context);
 
   useEffect(() => {
@@ -29,7 +44,6 @@ const Home: React.FC = () => {
       const closedTickets = await getAllClosedTickets();
       setAllOpenTickets(openTickets.data);
       setAllClosedTickets(closedTickets.data);
-      setComment('');
     })();
   }, [
     setAllClosedTickets,
@@ -41,21 +55,24 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Modal toggle={toggleModal} handleToggle={handleToggleModal} id={clickedTicket?.id}>
+      <Modal
+        toggle={toggleModalTicket}
+        handleToggle={handleToggleModalTicket}
+        id={clickedTicket?.id}
+      >
         <ClickedTicket ticket={clickedTicket} />
         <CommentSection>
           <div>
-            {commentsFromClickedTicket.map(comment => {
-              console.log(comment);
+            {commentsFromClickedTicket.map(oneComment => {
               return (
-                <div key={comment.created_at}>
-                  <p>{comment.comment}</p>
-                  <button
-                    // key={comment.created_at}
-                    onClick={() => handleDeleteComment(clickedTicket.id, comment.id)}
-                  >
-                    Deletar Comentário
-                  </button>
+                <div key={oneComment.created_at}>
+                  <p>{oneComment.comment}</p>
+                  <Moment format="DD/MM/YYYY HH:mm:ss">{oneComment.created_at}</Moment>
+                  {!clickedTicket.deleted_at ? (
+                    <button onClick={() => handleDeleteComment(clickedTicket.id, oneComment.id)}>
+                      Deletar Comentário
+                    </button>
+                  ) : null}
                 </div>
               );
             })}
@@ -66,14 +83,14 @@ const Home: React.FC = () => {
               <textarea
                 onChange={e => {
                   const { value } = e.target;
-                  if (value) setComment(value);
+                  setComment(value);
                 }}
                 value={comment}
                 name="comment"
                 id="comment"
                 cols={30}
                 rows={10}
-              ></textarea>
+              />
             </>
           ) : null}
         </CommentSection>
@@ -81,7 +98,7 @@ const Home: React.FC = () => {
           <Button
             onClick={async () => {
               if (comment) {
-                handleSubmit(clickedTicket.id, comment);
+                handleSubmit(clickedTicket.id);
               }
               handleCommentsTicket(clickedTicket.id);
             }}
@@ -91,7 +108,46 @@ const Home: React.FC = () => {
           <Button>Cancelar</Button>
         </ButtonsSection>
       </Modal>
+
+      <Modal
+        toggle={toggleModalNewTicket}
+        handleToggle={handleToggleModalNewTicket}
+        id="new-ticket"
+      >
+        <Form onSubmit={handleCreateTicket}>
+          <label htmlFor="subject">Assunto:</label>
+          <input
+            onChange={e => {
+              const { value } = e.target;
+              setSubject(value);
+            }}
+            value={subject}
+            id="subject"
+            type="text"
+          />
+          <label htmlFor="message">Mensagem:</label>
+          <textarea
+            onChange={e => {
+              const { value } = e.target;
+              setMessage(value);
+            }}
+            value={message}
+            name="message"
+            id="message"
+            cols={30}
+            rows={10}
+          />
+          <ButtonsSection>
+            <Button type="button" onClick={handleToggleModalNewTicket}>
+              Cancelar
+            </Button>
+            <Button type="submit">Abrir Chamado</Button>
+          </ButtonsSection>
+        </Form>
+      </Modal>
+
       <Container>
+        <Button onClick={handleToggleModalNewTicket}>Criar Ticket</Button>
         <OpenTickets>
           {allOpenTickets.length
             ? allOpenTickets.map(ticket => {

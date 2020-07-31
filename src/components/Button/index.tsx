@@ -1,7 +1,7 @@
-import React, { HTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { Container } from './styles';
 
-const Button: React.FC<HTMLAttributes<HTMLButtonElement>> = ({ children, ...rest }) => {
+const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, ...rest }) => {
   return (
     <Container>
       <button {...rest}>{children}</button>
