@@ -1,7 +1,14 @@
 import React, { createContext, useState, Dispatch, useEffect, SetStateAction } from 'react';
 import { getTokenFromLocalStorage } from '../services/localStorage';
-import { api, closeTicket, reopenTicket, createCommentInClickedTicket } from '../services/api';
-import { ITicket } from '../interfaces/interfaces';
+import {
+  api,
+  closeTicket,
+  reopenTicket,
+  createCommentInClickedTicket,
+  getCommentsFromClickedTicket,
+  deleteCommentFromClickedTicket,
+} from '../services/api';
+import { ITicket, IComment } from '../interfaces/interfaces';
 
 export interface IContext {
   clickedTicket: ITicket;
@@ -21,6 +28,10 @@ export interface IContext {
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
   handleSubmit(ticket_id: string, comment: string): void;
+  commentsFromClickedTicket: IComment[];
+  setCommentsFromClickedTicket: Dispatch<SetStateAction<IComment[]>>;
+  handleCommentsTicket(ticket_id: string): void;
+  handleDeleteComment(ticket_id: string, comment_id: string): void;
 }
 
 const Context = createContext<IContext>({} as IContext);
@@ -32,6 +43,7 @@ const ContextProvider: React.FC = ({ children }) => {
   const [allClosedTickets, setAllClosedTickets] = useState<ITicket[]>([]);
   const [refreshApi, setRefreshApi] = useState(false);
   const [comment, setComment] = useState('');
+  const [commentsFromClickedTicket, setCommentsFromClickedTicket] = useState<IComment[]>([]);
 
   useEffect(() => {
     const token = getTokenFromLocalStorage();
@@ -64,6 +76,15 @@ const ContextProvider: React.FC = ({ children }) => {
     createCommentInClickedTicket(ticket_id, comment);
   };
 
+  const handleCommentsTicket = async (ticket_id: string) => {
+    const foundComments = await getCommentsFromClickedTicket(ticket_id);
+    setCommentsFromClickedTicket(foundComments.data);
+  };
+
+  const handleDeleteComment = async (ticket_id: string, comment_id: string) => {
+    await deleteCommentFromClickedTicket(ticket_id, comment_id);
+  };
+
   return (
     <Context.Provider
       value={{
@@ -84,6 +105,10 @@ const ContextProvider: React.FC = ({ children }) => {
         comment,
         setComment,
         handleSubmit,
+        commentsFromClickedTicket,
+        setCommentsFromClickedTicket,
+        handleCommentsTicket,
+        handleDeleteComment,
       }}
     >
       {children}
