@@ -8,3 +8,12 @@ export interface ITicket {
   deleted_at: string;
   username: string;
 }
+
+export interface IComment {
+  id: string;
+  message: string;
+  user_id: number;
+  ticket_id: number;
+  created_at: string;
+  updated_at: string;
+}
