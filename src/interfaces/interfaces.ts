@@ -11,7 +11,7 @@ export interface ITicket {
 
 export interface IComment {
   id: string;
-  message: string;
+  comment: string;
   user_id: number;
   ticket_id: number;
   created_at: string;
