@@ -21,8 +21,11 @@ export const getAllClosedTickets = async (): Promise<AxiosResponse<ITicket[]>> =
   return await api.get('/tickets/archived');
 };
 
-export const createTicket = async (): Promise<AxiosResponse<ITicket>> => {
-  return await api.post(`/tickets`);
+export const createTicket = async (
+  subject: string,
+  message: string
+): Promise<AxiosResponse<ITicket>> => {
+  return await api.post(`/tickets`, { subject, message });
 };
 
 export const answerTicket = async (id: string): Promise<AxiosResponse<ITicket>> => {
