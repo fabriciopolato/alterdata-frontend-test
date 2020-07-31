@@ -14,11 +14,10 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
   const { subject, message, created_at, username, deleted_at } = ticket;
   const {
     handleClickTicket,
-    handleToggleModal,
+    handleToggleModalTicket,
     handleCloseTicket,
     handleReopenTicket,
     handleCommentsTicket,
-    setComment,
   } = useContext(Context);
 
   return (
@@ -43,8 +42,7 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
               onClick={() => {
                 handleClickTicket(ticket);
                 handleCommentsTicket(ticket.id);
-                setComment('');
-                handleToggleModal();
+                handleToggleModalTicket();
               }}
             >
               Visualizar
@@ -63,8 +61,7 @@ const Ticket: React.FC<PropsTickets> = ({ closedTicket = false, ticket, ...rest 
               onClick={() => {
                 handleClickTicket(ticket);
                 handleCommentsTicket(ticket.id);
-                setComment('');
-                handleToggleModal();
+                handleToggleModalTicket();
               }}
             >
               Responder
