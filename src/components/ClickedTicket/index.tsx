@@ -13,27 +13,30 @@ const ClickedTicket: React.FC<PropsTickets> = ({ ticket, ...rest }) => {
   return (
     <Container {...rest}>
       <Content>
-        <h1>{subject}</h1>
+        <h4>{subject}</h4>
         <p>{message}</p>
-        <span>{username}</span>
         <div>
-          <span>Criado em: </span>
-          <Moment format="DD/MM/YYYY HH:mm">{created_at}</Moment>
+          <small>
+            Criado em: <Moment format="DD/MM/YYYY HH:mm">{created_at}</Moment>
+          </small>
         </div>
 
         {updated_at ? (
           <div>
-            <span>Atualizado em: </span>
-            <Moment format="DD/MM/YYYY HH:mm">{updated_at}</Moment>
+            <small>
+              Atualizado em: <Moment format="DD/MM/YYYY HH:mm">{updated_at}</Moment>
+            </small>
           </div>
         ) : null}
 
         {deleted_at ? (
           <div>
-            <span>Encerrado em: </span>
-            <Moment format="DD/MM/YYYY HH:mm">{deleted_at}</Moment>
+            <small>
+              Encerrado em: <Moment format="DD/MM/YYYY HH:mm">{deleted_at}</Moment>
+            </small>
           </div>
         ) : null}
+        <small>Por: {username}</small>
       </Content>
     </Container>
   );
