@@ -48,6 +48,8 @@ export interface IContext {
   message: string;
   setMessage: Dispatch<SetStateAction<string>>;
   handleCreateTicket(e: FormEvent): void;
+  allAnsweredTickets: ITicket[];
+  setAllAnsweredTickets: Dispatch<SetStateAction<ITicket[]>>;
 }
 
 const Context = createContext<IContext>({} as IContext);
@@ -58,6 +60,7 @@ const ContextProvider: React.FC = ({ children }) => {
   const [toggleModalNewTicket, setToggleModalNewTicket] = useState(false);
   const [allOpenTickets, setAllOpenTickets] = useState<ITicket[]>([]);
   const [allClosedTickets, setAllClosedTickets] = useState<ITicket[]>([]);
+  const [allAnsweredTickets, setAllAnsweredTickets] = useState<ITicket[]>([]);
   const [refreshApi, setRefreshApi] = useState(false);
   const [comment, setComment] = useState('');
   const [commentsFromClickedTicket, setCommentsFromClickedTicket] = useState<IComment[]>([]);
@@ -107,8 +110,9 @@ const ContextProvider: React.FC = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-
     setComment('');
+    setRefreshApi(!refreshApi);
+    handleToggleModalTicket();
   };
 
   const handleCommentsTicket = async (ticket_id: string) => {
@@ -167,6 +171,8 @@ const ContextProvider: React.FC = ({ children }) => {
         message,
         setMessage,
         handleCreateTicket,
+        allAnsweredTickets,
+        setAllAnsweredTickets,
       }}
     >
       {children}
