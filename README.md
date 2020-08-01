@@ -50,6 +50,16 @@ PORTS: 3000
 http://localhost:3000/
 ```
 
+### Authentication
+
+In order to perform login in the application, you need to use one of the following email and password:
+
+email: joao@email.com
+password: 1212
+
+email: carlos@email.com
+password: 1313
+
 <!-- CONTACT -->
 
 ## Contact
