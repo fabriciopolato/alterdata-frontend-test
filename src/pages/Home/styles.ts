@@ -1,18 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  margin: 20px 0;
+  margin: 32px 0;
   display: flex;
-  align-items: baseline;
-  justify-content: space-evenly;
+  align-items: flex-start;
+  justify-content: center;
 `;
-
-export const OpenTickets = styled.div`
-  display: flex;
-  width: 1040px;
-  flex-wrap: wrap;
-`;
-export const ClosedTickets = styled.div``;
 
 export const CommentSection = styled.section`
   display: flex;
@@ -23,7 +16,6 @@ export const ButtonsSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-self: flex-end;
-  border: 1px solid #666666;
 `;
 
 export const Form = styled.form`

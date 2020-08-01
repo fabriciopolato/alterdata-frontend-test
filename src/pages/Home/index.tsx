@@ -1,13 +1,6 @@
 import React, { useEffect, useContext } from 'react';
-import { Ticket, Modal, ClickedTicket, Button } from '../../components';
-import {
-  Container,
-  OpenTickets,
-  ClosedTickets,
-  CommentSection,
-  ButtonsSection,
-  Form,
-} from './styles';
+import { Modal, ClickedTicket, Button, Header, TicketsColumn } from '../../components';
+import { Container, CommentSection, ButtonsSection, Form } from './styles';
 import { getAllOpenTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
 import Moment from 'react-moment';
@@ -23,6 +16,8 @@ const Home: React.FC = () => {
     setAllOpenTickets,
     allClosedTickets,
     setAllClosedTickets,
+    allAnsweredTickets,
+    setAllAnsweredTickets,
     refreshApi,
     comment,
     setComment,
@@ -42,8 +37,17 @@ const Home: React.FC = () => {
     (async () => {
       const openTickets = await getAllOpenTickets();
       const closedTickets = await getAllClosedTickets();
-      setAllOpenTickets(openTickets.data);
+      setAllOpenTickets(
+        openTickets.data.filter(
+          ticket => new Date(ticket.created_at).getTime() === new Date(ticket.updated_at).getTime()
+        )
+      );
       setAllClosedTickets(closedTickets.data);
+      setAllAnsweredTickets(
+        openTickets.data.filter(
+          ticket => new Date(ticket.created_at).getTime() !== new Date(ticket.updated_at).getTime()
+        )
+      );
     })();
   }, [
     setAllClosedTickets,
@@ -51,6 +55,7 @@ const Home: React.FC = () => {
     refreshApi,
     setComment,
     setCommentsFromClickedTicket,
+    setAllAnsweredTickets,
   ]);
 
   return (
@@ -65,7 +70,7 @@ const Home: React.FC = () => {
           <div>
             {commentsFromClickedTicket.map(oneComment => {
               return (
-                <div key={oneComment.created_at}>
+                <div key={oneComment.id}>
                   <p>{oneComment.comment}</p>
                   <Moment format="DD/MM/YYYY HH:mm:ss">{oneComment.created_at}</Moment>
                   {!clickedTicket.deleted_at ? (
@@ -146,22 +151,15 @@ const Home: React.FC = () => {
         </Form>
       </Modal>
 
+      <Header />
       <Container>
-        <Button onClick={handleToggleModalNewTicket}>Criar Ticket</Button>
-        <OpenTickets>
-          {allOpenTickets.length
-            ? allOpenTickets.map(ticket => {
-                return <Ticket key={ticket.id} ticket={ticket} />;
-              })
-            : null}
-        </OpenTickets>
-        <ClosedTickets>
-          {allClosedTickets.length
-            ? allClosedTickets.map(ticket => {
-                return <Ticket closedTicket key={ticket.id} ticket={ticket} />;
-              })
-            : null}
-        </ClosedTickets>
+        <TicketsColumn
+          title="Em aberto"
+          backgroundColor="#36427D"
+          tickets={allOpenTickets}
+        ></TicketsColumn>
+        <TicketsColumn title="Respondidos" backgroundColor="#30A697" tickets={allAnsweredTickets} />
+        <TicketsColumn title="Encerrado" backgroundColor="#7D6536" tickets={allClosedTickets} />
       </Container>
     </>
   );
