@@ -1,12 +1,15 @@
 import React, { ButtonHTMLAttributes } from 'react';
-import { Container } from './styles';
+import { StyledButton } from './styles';
 
-const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, ...rest }) => {
-  return (
-    <Container>
-      <button {...rest}>{children}</button>
-    </Container>
-  );
+interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
+  isArchive?: boolean;
+  isComment?: boolean;
+  isTransparent?: boolean;
+  isBlue?: boolean;
+}
+
+const Button: React.FC<IButton> = ({ children, ...rest }) => {
+  return <StyledButton {...rest}>{children}</StyledButton>;
 };
 
 export default Button;
