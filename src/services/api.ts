@@ -3,10 +3,6 @@ import { ITicket, IComment } from '../interfaces/interfaces';
 
 export const api = axios.create({
   baseURL: 'http://localhost:3333',
-  headers: {
-    Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJjYXJsb3NAZW1haWwuY29tIiwiaWF0IjoxNTk2MTYzMzA1fQ.LaTzyryDcLATaMTmylE7YiZbSlGx1ddsBz-Qh0X2i4I',
-  },
 });
 
 export const login = async (): Promise<AxiosResponse<any>> => {
