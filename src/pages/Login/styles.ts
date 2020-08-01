@@ -36,6 +36,12 @@ export const Container = styled.div`
     box-shadow: -1px 3px 12px rgba(12, 11, 14, 0.25);
     border-radius: 3px;
     padding: 40px 48px 24px;
+
+    span {
+      display: block;
+      margin: 0 auto;
+      color: brown;
+    }
   }
 
   button {

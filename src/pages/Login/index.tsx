@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Button, Input } from '../../components';
 import { Container } from './styles';
 import { Form } from '@unform/web';
@@ -16,6 +16,8 @@ interface SignInFormData {
 const Login: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const history = useHistory();
+
+  const [error, setError] = useState(false);
 
   const { signIn } = useAuth();
 
@@ -47,6 +49,7 @@ const Login: React.FC = () => {
 
           return;
         }
+        setError(true);
       }
     },
     [signIn, history]
@@ -70,6 +73,7 @@ const Login: React.FC = () => {
           type="password"
           placeholder="Insira sua senha aqui"
         />
+        {error && <span>Falha ao fazer login</span>}
 
         <Button data-testid="login">login</Button>
       </Form>
