@@ -24,7 +24,7 @@ export default createGlobalStyle`
     color: #171C35;
     font-size: 10px;
     font-family: 'Work Sans', sans-serif;
-    letter-spacing: 0.3px;
+    letter-spacing: -0.3px;
   }
 
   body {
