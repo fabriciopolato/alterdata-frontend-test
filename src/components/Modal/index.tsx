@@ -1,6 +1,5 @@
 import React from 'react';
-import close from '../../assets/close.svg';
-import { Container, Content, CloseIcon } from './styles';
+import { Container, Content } from './styles';
 
 interface IProps {
   toggle: boolean;
@@ -12,10 +11,7 @@ interface IProps {
 const Modal: React.FC<IProps> = ({ toggle, handleToggle, id, children }) => {
   return (
     <Container toggle={toggle}>
-      <Content id={id}>
-        <CloseIcon src={close} alt="Fechar" onClick={handleToggle} />
-        {children}
-      </Content>
+      <Content id={id}>{children}</Content>
     </Container>
   );
 };

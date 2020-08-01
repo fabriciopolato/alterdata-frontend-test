@@ -1,11 +1,23 @@
-import React, { useEffect, useContext } from 'react';
-import { Modal, ClickedTicket, Button, Header, TicketsColumn } from '../../components';
-import { Container, CommentSection, ButtonsSection, Form } from './styles';
+import React, { useEffect, useContext, useRef } from 'react';
+import { Modal, ClickedTicket, Button, Header, TicketsColumn, Input } from '../../components';
+import {
+  Container,
+  CommentSection,
+  ButtonsSection,
+  ModalHeader,
+  Form,
+  FormGroup,
+  CardComment,
+  Wrapper,
+} from './styles';
 import { getAllOpenTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
 import Moment from 'react-moment';
+import { FormHandles } from '@unform/core';
 
 const Home: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+
   const {
     clickedTicket,
     toggleModalTicket,
@@ -35,19 +47,27 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const openTickets = await getAllOpenTickets();
       const closedTickets = await getAllClosedTickets();
-      setAllOpenTickets(
-        openTickets.data.filter(
-          ticket => new Date(ticket.created_at).getTime() === new Date(ticket.updated_at).getTime()
-        )
-      );
       setAllClosedTickets(closedTickets.data);
-      setAllAnsweredTickets(
-        openTickets.data.filter(
-          ticket => new Date(ticket.created_at).getTime() !== new Date(ticket.updated_at).getTime()
-        )
-      );
+      try {
+        const openTickets = await getAllOpenTickets();
+        setAllOpenTickets(
+          openTickets.data.filter(
+            ticket =>
+              new Date(ticket.created_at).getTime() === new Date(ticket.updated_at).getTime()
+          )
+        );
+        setAllAnsweredTickets(
+          openTickets.data.filter(
+            ticket =>
+              new Date(ticket.created_at).getTime() !== new Date(ticket.updated_at).getTime()
+          )
+        );
+      } catch (error) {
+        setAllOpenTickets([]);
+        setAllAnsweredTickets([]);
+        return;
+      }
     })();
   }, [
     setAllClosedTickets,
@@ -65,53 +85,106 @@ const Home: React.FC = () => {
         handleToggle={handleToggleModalTicket}
         id={clickedTicket?.id}
       >
-        <ClickedTicket ticket={clickedTicket} />
-        <CommentSection>
-          <div>
-            {commentsFromClickedTicket.map(oneComment => {
-              return (
-                <div key={oneComment.id}>
-                  <p>{oneComment.comment}</p>
-                  <Moment format="DD/MM/YYYY HH:mm:ss">{oneComment.created_at}</Moment>
-                  {!clickedTicket.deleted_at ? (
-                    <button onClick={() => handleDeleteComment(clickedTicket.id, oneComment.id)}>
-                      Deletar Comentário
-                    </button>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-          {!clickedTicket.deleted_at ? (
-            <>
-              <label htmlFor="comment">Comentário:</label>
-              <textarea
-                onChange={e => {
-                  const { value } = e.target;
-                  setComment(value);
-                }}
-                value={comment}
-                name="comment"
-                id="comment"
-                cols={30}
-                rows={10}
-              />
-            </>
-          ) : null}
-        </CommentSection>
-        <ButtonsSection>
-          <Button
-            onClick={async () => {
-              if (comment) {
-                handleCreateComment(clickedTicket.id);
-              }
-              handleCommentsTicket(clickedTicket.id);
-            }}
-          >
-            Responder
-          </Button>
-          <Button>Cancelar</Button>
-        </ButtonsSection>
+        {clickedTicket.deleted_at ? (
+          <ModalHeader color="#7D6536">
+            <h2>Visualizar</h2>
+          </ModalHeader>
+        ) : new Date(clickedTicket.created_at).getTime() ===
+          new Date(clickedTicket.updated_at).getTime() ? (
+          <ModalHeader color="#36427D">
+            <h2>Responder</h2>
+          </ModalHeader>
+        ) : (
+          <ModalHeader color="#30A697">
+            <h2>Comentar</h2>
+          </ModalHeader>
+        )}
+        <Wrapper>
+          <ClickedTicket ticket={clickedTicket} />
+          <CommentSection>
+            <div>
+              {commentsFromClickedTicket.map(oneComment => {
+                return (
+                  <CardComment key={oneComment.id}>
+                    <small>
+                      Em <Moment format="DD/MM/YYYY HH:mm">{oneComment.created_at}</Moment>:
+                    </small>
+                    <p>{oneComment.comment}</p>
+                    {!clickedTicket.deleted_at ? (
+                      <button onClick={() => handleDeleteComment(clickedTicket.id, oneComment.id)}>
+                        Deletar Comentário
+                      </button>
+                    ) : null}
+                  </CardComment>
+                );
+              })}
+            </div>
+            {!clickedTicket.deleted_at ? (
+              <>
+                <label htmlFor="comment">Comentário:</label>
+                <textarea
+                  onChange={e => {
+                    const { value } = e.target;
+                    setComment(value);
+                  }}
+                  value={comment}
+                  name="comment"
+                  id="comment"
+                  cols={30}
+                  rows={10}
+                />
+              </>
+            ) : null}
+          </CommentSection>
+
+          <ButtonsSection>
+            {clickedTicket.deleted_at ? (
+              <>
+                <Button
+                  style={{ display: 'block', margin: '0 auto' }}
+                  isArchive
+                  onClick={handleToggleModalTicket}
+                >
+                  Cancelar
+                </Button>
+              </>
+            ) : new Date(clickedTicket.created_at).getTime() ===
+              new Date(clickedTicket.updated_at).getTime() ? (
+              <>
+                <Button isTransparent isBlue onClick={handleToggleModalTicket}>
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={async () => {
+                    if (comment) {
+                      handleCreateComment(clickedTicket.id);
+                    }
+                    handleCommentsTicket(clickedTicket.id);
+                  }}
+                >
+                  Comentar
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button isTransparent onClick={handleToggleModalTicket}>
+                  Cancelar
+                </Button>
+                <Button
+                  isComment
+                  onClick={async () => {
+                    if (comment) {
+                      handleCreateComment(clickedTicket.id);
+                    }
+                    handleCommentsTicket(clickedTicket.id);
+                  }}
+                >
+                  Comentar
+                </Button>
+              </>
+            )}
+          </ButtonsSection>
+        </Wrapper>
       </Modal>
 
       <Modal
@@ -119,34 +192,23 @@ const Home: React.FC = () => {
         handleToggle={handleToggleModalNewTicket}
         id="new-ticket"
       >
-        <Form onSubmit={handleCreateTicket}>
-          <label htmlFor="subject">Assunto:</label>
-          <input
-            onChange={e => {
-              const { value } = e.target;
-              setSubject(value);
-            }}
-            value={subject}
-            id="subject"
-            type="text"
-          />
-          <label htmlFor="message">Mensagem:</label>
-          <textarea
-            onChange={e => {
-              const { value } = e.target;
-              setMessage(value);
-            }}
-            value={message}
-            name="message"
-            id="message"
-            cols={30}
-            rows={10}
-          />
+        <ModalHeader color="#36427d">
+          <h2>Abrir chamado</h2>
+        </ModalHeader>
+        <Form ref={formRef} onSubmit={handleCreateTicket}>
+          <FormGroup>
+            <label htmlFor="subject">Assunto</label>
+            <Input name="subject" type="text" placeholder="Digite aqui" />
+          </FormGroup>
+          <FormGroup>
+            <label>Mensagem</label>
+            <Input name="message" type="text" placeholder="Digite aqui"></Input>
+          </FormGroup>
           <ButtonsSection>
-            <Button type="button" onClick={handleToggleModalNewTicket}>
+            <Button onClick={handleToggleModalNewTicket} isBlue isTransparent type="button">
               Cancelar
             </Button>
-            <Button type="submit">Abrir Chamado</Button>
+            <Button type="submit">Abrir chamado</Button>
           </ButtonsSection>
         </Form>
       </Modal>

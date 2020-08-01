@@ -14,11 +14,10 @@ import { FiAlertCircle } from 'react-icons/fi';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   icon?: React.ComponentType<IconBaseProps>;
-  label?: string;
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input2: React.FC<InputProps> = ({ name, icon: Icon, label, handleChange, ...rest }) => {
+const Input: React.FC<InputProps> = ({ name, icon: Icon, handleChange, ...rest }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { fieldName, error, registerField } = useField(name);
 
@@ -42,7 +41,6 @@ const Input2: React.FC<InputProps> = ({ name, icon: Icon, label, handleChange, .
 
   return (
     <>
-      <StyledLabel htmlFor={name}>{label}</StyledLabel>
       <Container isErrored={!!error} isFocused={isFocused} data-testid="input-container">
         <StyledInput
           isFocused={isFocused}
@@ -64,4 +62,4 @@ const Input2: React.FC<InputProps> = ({ name, icon: Icon, label, handleChange, .
   );
 };
 
-export default Input2;
+export default Input;

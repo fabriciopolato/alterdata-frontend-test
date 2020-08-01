@@ -47,9 +47,14 @@ export interface IContext {
   setSubject: Dispatch<SetStateAction<string>>;
   message: string;
   setMessage: Dispatch<SetStateAction<string>>;
-  handleCreateTicket(e: FormEvent): void;
+  handleCreateTicket(data: CreateTicketFormData): void;
   allAnsweredTickets: ITicket[];
   setAllAnsweredTickets: Dispatch<SetStateAction<ITicket[]>>;
+}
+
+interface CreateTicketFormData {
+  subject: string;
+  message: string;
 }
 
 const Context = createContext<IContext>({} as IContext);
@@ -102,8 +107,6 @@ const ContextProvider: React.FC = ({ children }) => {
   };
 
   const handleCreateComment = async (ticket_id: string) => {
-    createCommentInClickedTicket(ticket_id, comment);
-
     try {
       const createdComment = await createCommentInClickedTicket(ticket_id, comment);
       setCommentsFromClickedTicket(prevState => [...prevState, createdComment.data]);
@@ -132,9 +135,8 @@ const ContextProvider: React.FC = ({ children }) => {
     }
   };
 
-  const handleCreateTicket = async (e: FormEvent) => {
-    e.preventDefault();
-    await createTicket(subject, message);
+  const handleCreateTicket = async (data: CreateTicketFormData) => {
+    await createTicket(data.subject, data.message);
     setRefreshApi(!refreshApi);
     setToggleModalNewTicket(!toggleModalNewTicket);
   };

@@ -8,17 +8,17 @@ export const Container = styled.div<IProps>`
   visibility: ${props => (props.toggle ? 'visible' : 'hidden')};
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
-  height: 100%;
-  padding: 0 25px;
-  position: fixed;
+  height: 4000px;
+  position: absolute;
   top: 0;
   left: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 10;
   animation: ${props => (props.toggle ? 'fadeIn' : 'fadeOut')} 400ms ease forwards;
   transition: visibility 400ms linear;
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -39,13 +39,12 @@ export const Container = styled.div<IProps>`
 
 export const Content = styled.div`
   position: relative;
-  width: 100%;
-  max-width: 480px;
-  padding: 12px;
+  width: 536px;
   background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 22px;
+  border-radius: 3px;
   z-index: 20;
+
   & > h2 {
     font-family: 'Museo';
     font-weight: 600;
@@ -66,10 +65,4 @@ export const Content = styled.div`
       color: ${props => props.theme.white};
     }
   }
-`;
-
-export const CloseIcon = styled.img`
-  position: absolute;
-  top: 24px;
-  right: 24px;
 `;
