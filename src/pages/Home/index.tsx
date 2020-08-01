@@ -9,6 +9,7 @@ import {
   FormGroup,
   CardComment,
   Wrapper,
+  DeleteIcon,
 } from './styles';
 import { getAllOpenTickets, getAllClosedTickets } from '../../services/api';
 import { Context } from '../../context/context';
@@ -109,11 +110,14 @@ const Home: React.FC = () => {
                     <small>
                       Em <Moment format="DD/MM/YYYY HH:mm">{oneComment.created_at}</Moment>:
                     </small>
+
                     <p>{oneComment.comment}</p>
                     {!clickedTicket.deleted_at ? (
-                      <button onClick={() => handleDeleteComment(clickedTicket.id, oneComment.id)}>
-                        Deletar Comentário
-                      </button>
+                      <DeleteIcon
+                        size={20}
+                        color="#171C35"
+                        onClick={() => handleDeleteComment(clickedTicket.id, oneComment.id)}
+                      />
                     ) : null}
                   </CardComment>
                 );
@@ -121,7 +125,7 @@ const Home: React.FC = () => {
             </div>
             {!clickedTicket.deleted_at ? (
               <>
-                <label htmlFor="comment">Comentário:</label>
+                <label htmlFor="comment">Comentário</label>
                 <textarea
                   onChange={e => {
                     const { value } = e.target;
@@ -130,8 +134,6 @@ const Home: React.FC = () => {
                   value={comment}
                   name="comment"
                   id="comment"
-                  cols={30}
-                  rows={10}
                 />
               </>
             ) : null}

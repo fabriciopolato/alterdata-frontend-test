@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Form as StyledForm } from '@unform/web';
+import { AiFillDelete } from 'react-icons/ai';
 
 interface IProps {
   color: string;
@@ -15,6 +16,39 @@ export const Container = styled.div`
 export const CommentSection = styled.section`
   display: flex;
   flex-direction: column;
+
+  textarea {
+    margin-bottom: 33px;
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid #c8c6e3;
+    border-radius: 3px;
+    font-family: Work Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.6rem;
+    line-height: 20px;
+    /* letter-spacing: -0.02em; */
+    color: #68696a;
+    resize: none;
+
+    ::placeholder {
+    }
+  }
+
+  label {
+    font-family: Work Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    align-items: center;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    color: #171c35;
+  }
 `;
 
 export const ButtonsSection = styled.div`
@@ -39,7 +73,20 @@ export const Wrapper = styled.div`
   padding: 0 40px 40px 40px;
 `;
 
+export const DeleteIcon = styled(AiFillDelete)`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+
+  :hover {
+    fill: brown;
+  }
+`;
+
 export const CardComment = styled.div`
+  position: relative;
+
   small {
     font-size: 1.4rem;
     line-height: 20px;
@@ -66,26 +113,6 @@ export const FormGroup = styled.div`
     letter-spacing: -0.02em;
     margin-bottom: 8px;
     color: #171c35;
-  }
-
-  textarea {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background: #ffffff;
-    border: 1px solid #c8c6e3;
-    border-radius: 3px;
-    font-family: Work Sans;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 1.6rem;
-    line-height: 20px;
-    /* letter-spacing: -0.02em; */
-    color: #68696a;
-    resize: none;
-
-    ::placeholder {
-    }
   }
 `;
 
