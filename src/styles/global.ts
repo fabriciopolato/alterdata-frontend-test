@@ -17,13 +17,14 @@ export default createGlobalStyle`
     width: 100vw;
     max-width: 100%;
     min-height: 100vh;
-    background-color: #ccc;
+    background-color: rgb(237,239,247);
   }
 
   html {
+    color: #171C35;
     font-size: 10px;
-    font-family: 'Raleway', serif;
-    letter-spacing: 1px;
+    font-family: 'Work Sans', sans-serif;
+    letter-spacing: 0.3px;
   }
 
   body {
@@ -47,7 +48,7 @@ export default createGlobalStyle`
   }
 
   body, input, button {
-    font: 1.6rem 'Raleway', sans-serif;
+    font: 1.6rem 'Work Sans', sans-serif;
   }
 
   a {
@@ -59,7 +60,45 @@ export default createGlobalStyle`
     list-style: none;
   }
 
+  h2 {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 38px;
+    line-height: 48px;
+  }
+
+  h4 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  p {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  small {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
   button {
     cursor: pointer;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+    text-transform: uppercase;
+    padding: 8px 0;
+    width: 220px;
+    font-weight: 600;
+    line-height: 24px;
   }
 `;
