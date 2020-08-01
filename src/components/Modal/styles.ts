@@ -60,7 +60,7 @@ export const Content = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     & > li {
-      font-family: Raleway;
+      font-family: 'Work Sans', sans-serif;
       font-weight: normal;
       font-size: 1.6rem;
       color: ${props => props.theme.white};
